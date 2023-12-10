@@ -1,4 +1,5 @@
 "use client";
+//@ts-nocheck 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import logo from "@/public/logoZeroCode.png";
@@ -14,6 +15,7 @@ import { signIn } from "next-auth/react";
 export default function Signup() {
   const router = useRouter();
   const apiUrl = "https://xerocode-be-assignment.netlify.app/"
+  // const apiUrl = "http://localhost:8888/"
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
