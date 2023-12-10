@@ -92,7 +92,7 @@ export default function Signup() {
               />
             </div>
             <Button
-              onClick={handleSubmit}
+              onClick={()=>{router.push("/intermediate");}}
               size={"lg"}
               className="w-full bg-[#1F64FF] mt-4"
             >

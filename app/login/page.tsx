@@ -76,7 +76,7 @@ export default function Login() {
               />
             </div>
             <Button
-              onClick={login}
+              onClick={()=>{router.push("/intermediate");}}
               size={"lg"}
               className="w-full bg-[#1F64FF] mt-4"
             >
