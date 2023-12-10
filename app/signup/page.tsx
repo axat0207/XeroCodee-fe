@@ -10,12 +10,50 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import google from "@/public/google.png";
 import github from "@/public/github1.png";
+import { signIn } from "next-auth/react";
 export default function Signup() {
   const router = useRouter();
+  const apiUrl = "http://localhost:8888/"
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setcConfirmPPassword] = useState("");
+
+  const handleSubmit = async (e:any) => {
+    e.preventDefault();
+    if(password!==confirmPassword)
+    {
+        alert('Password and confirmPassword must be Same!');
+        return;
+    }
+    const response = await fetch(apiUrl+"api/auth/createuser", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({name: name,email: email, password: password})
+        
+    });
+   
+    const json = await response.json()
+    console.log(json);
+    
+    if(json.error){
+      alert(json.error)
+    }
+    if (json.authtoken){
+      // Save the auth token and redirect
+      localStorage.setItem('token', json.authtoken); 
+      router.push("/intermediate");
+      alert('Account Created Successfully')
+
+  }
+ 
+
+        
+    
+    
+}
 
   return (
     <div className=" min-h-screen flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8">
@@ -26,7 +64,7 @@ export default function Signup() {
               <Image src={logo} alt="logo" />
             </div>
             <div className="text-3xl mt-4 font-semibold text-center">
-              Welcome Arya Soni!
+              Welcome !
             </div>
             <span className="flex text-md mt-4 mx-auto">
               {/* <hr className="hidden md:block w-16 mt-3 mx-2" /> */}
@@ -60,7 +98,7 @@ export default function Signup() {
               />
             </div>
             <Button
-              onClick={() => router.push("/intermediate")}
+              onClick={handleSubmit}
               size={"lg"}
               className="w-full bg-[#1F64FF] mt-4"
             >
@@ -72,7 +110,7 @@ export default function Signup() {
                 variant={"outline"}
                 className="gap-2 text-slate-600 text-sm"
               >
-                <div>Google Login</div>
+                <div onClick={()=>{signIn('google');router.push("/intermediate")}} >Google Login</div>
                 <div className="w-7">
                   <Image src={google} alt="google" />
                 </div>
@@ -81,7 +119,7 @@ export default function Signup() {
                 variant={"outline"}
                 className="text-slate-600 gap-2 text-sm"
               >
-                <div>Github Login</div>
+                <div onClick={()=>{signIn('github');router.push("/intermediate");}}>Github Login</div>
                 <div className="w-7">
                   <Image className="" src={github} alt="github" />
                 </div>

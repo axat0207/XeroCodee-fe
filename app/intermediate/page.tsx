@@ -1,6 +1,6 @@
-'use client'
+"use client";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "@/public/logoZeroCode.png";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
@@ -10,8 +10,44 @@ export default function Intermediate() {
   const router = useRouter();
   const [showInput, setShowInput] = useState(false);
   const [placeholderText, setPlaceholderText] = useState("");
+  const [name, setName] = useState();
+  const apiUrl = "http://localhost:8888/";
 
-  const handleClick = (type:string) => {
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const response = await fetch(apiUrl + "/api/auth/getuser", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            // Authorization header for sending the token
+            "auth-token": "localStorage.getItem(`token`)",
+          },
+        });
+  
+        if (!response.ok) {
+          // Handle non-successful response
+          throw new Error('Failed to fetch user data');
+        }
+  
+        const json = await response.json();
+        console.log(json);
+        setName(json); // Assuming setName is a state updater function
+      } catch (error) {
+        console.error(error);
+        // Handle errors (e.g., set an error state)
+      }
+    };
+  
+    // Call the function only when the token changes (dependency)
+    if (localStorage.getItem("token")) {
+      getUser();
+    }
+  }, [apiUrl]); // Add any dependencies needed, such as apiUrl
+  
+
+  console.log(name + "  :  name api getuser");
+  const handleClick = (type: string) => {
     if (type === "Developer") {
       router.push("/hosting");
     } else if (type === "Orgnisation" || type === "Company") {
@@ -28,58 +64,61 @@ export default function Intermediate() {
 
   return (
     <div className="flex justify-center pt-32 lg:pt-10 md:pt-20">
-  <div className="w-full md:w-4/5  h-auto md:h-[70vh] bg-white shadow-2xl rounded-2xl p-6 md:p-8">
-    <div className="flex flex-col items-center">
-      <div className="mb-6 md:mb-10">
-        <Image src={logo} alt="logo" />
-      </div>
-      <div className="text-2xl md:text-4xl text-center">Welcome Arya Soni!</div>
-      <div className="flex mt-4 md:mt-6 items-center justify-center">
-        <hr className="w-14 md:w-28 bg-gray-500 mt-2 md:mt-5 mx-2 md:mx-4" />
-        <span className="text-base md:text-xl text-gray-500">Choose the following</span>
-        <hr className="w-14 md:w-28 bg-gray-500 mt-2 md:mt-5 mx-2 md:mx-4" />
-      </div>
+      <div className="w-full md:w-4/5  h-auto md:h-[70vh] bg-white shadow-2xl rounded-2xl p-6 md:p-8">
+        <div className="flex flex-col items-center">
+          <div className="mb-6 md:mb-10">
+            <Image src={logo} alt="logo" />
+          </div>
+          <div className="text-2xl md:text-4xl text-center">
+            Welcome Arya Soni!
+          </div>
+          <div className="flex mt-4 md:mt-6 items-center justify-center">
+            <hr className="w-14 md:w-28 bg-gray-500 mt-2 md:mt-5 mx-2 md:mx-4" />
+            <span className="text-base md:text-xl text-gray-500">
+              Choose the following
+            </span>
+            <hr className="w-14 md:w-28 bg-gray-500 mt-2 md:mt-5 mx-2 md:mx-4" />
+          </div>
 
-      <div className="flex flex-col md:flex-row gap-2 md:gap-6 mt-6 md:mt-16 justify-center">
-        <div
-          className="rounded-md font-medium px-6 md:px-12 py-2 md:py-3 border-[0.5px] border-[#C0C0C0] cursor-pointer text-center"
-          onClick={() => handleClick("Developer")}
-        >
-          Developer
-        </div>
-        <div
-          className="rounded-md px-6 md:px-12 py-2 md:py-3 font-medium border-[0.5px] border-[#C0C0C0] cursor-pointer text-center"
-          onClick={() => handleClick("Orgnisation")}
-        >
-          Orgnisation
-        </div>
-        <div
-          className="rounded-md px-6 md:px-12 py-2 md:py-3 border-[0.5px] font-medium border-[#C0C0C0] cursor-pointer text-center"
-          onClick={() => handleClick("Company")}
-        >
-          Company
+          <div className="flex flex-col md:flex-row gap-2 md:gap-6 mt-6 md:mt-16 justify-center">
+            <div
+              className="rounded-md font-medium px-6 md:px-12 py-2 md:py-3 border-[0.5px] border-[#C0C0C0] cursor-pointer text-center"
+              onClick={() => handleClick("Developer")}
+            >
+              Developer
+            </div>
+            <div
+              className="rounded-md px-6 md:px-12 py-2 md:py-3 font-medium border-[0.5px] border-[#C0C0C0] cursor-pointer text-center"
+              onClick={() => handleClick("Orgnisation")}
+            >
+              Orgnisation
+            </div>
+            <div
+              className="rounded-md px-6 md:px-12 py-2 md:py-3 border-[0.5px] font-medium border-[#C0C0C0] cursor-pointer text-center"
+              onClick={() => handleClick("Company")}
+            >
+              Company
+            </div>
+          </div>
+
+          {showInput && (
+            <div className="flex flex-col md:flex-row gap-2 md:gap-6 mt-6 md:mt-16 justify-center">
+              <Input
+                className="w-full md:w-80"
+                placeholder={`${placeholderText} name`}
+              />
+              <Button
+                size={"default"}
+                variant={"secondary"}
+                className="w-full md:w-auto bg-[#1F64FF] text-white"
+                onClick={handleSubmit}
+              >
+                Submit
+              </Button>
+            </div>
+          )}
         </div>
       </div>
-
-      {showInput && (
-        <div className="flex flex-col md:flex-row gap-2 md:gap-6 mt-6 md:mt-16 justify-center">
-          <Input
-            className="w-full md:w-80"
-            placeholder={`${placeholderText} name`}
-          />
-          <Button
-            size={"default"}
-            variant={"secondary"}
-            className="w-full md:w-auto bg-[#1F64FF] text-white"
-            onClick={handleSubmit}
-          >
-            Submit
-          </Button>
-        </div>
-      )}
     </div>
-  </div>
-</div>
-
   );
 }

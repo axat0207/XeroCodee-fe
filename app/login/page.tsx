@@ -13,15 +13,39 @@ import Cookies from "js-cookie";
 import { signIn } from "next-auth/react";
 
 export default function Login() {
-  const router = useRouter();
-  const login = (e: any) => {
-    e.preventDefault();
-    // Cookies.set("loggedin", "true");
-    router.push("/intermediate");
-  };
-console.log("1ab7027724d8d791eeae"+ "git hub id")
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const apiUrl = "http://localhost:8888/"
+  const router = useRouter();
+  const login = async(e: any) => {
+    e.preventDefault();
+    
+    
+      const response = await fetch(apiUrl+"api/auth/login", {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({email: email, password: password})
+      });
+      const json = await response.json()
+      console.log(json);
+      if (json.success){
+          // Save the auth token and redirect
+          localStorage.setItem('token', json.authtoken); 
+          router.push("/intermediate");
+
+      }
+      else{
+          alert("Invalid credentials");
+      }
+  
+    
+  };
+console.log(process.env.NODE_ENV+ "  mdfm flks")
+console.log(process.env.NEXT_PUBLIC_GITHUB_ID+ "   github id")
+
   return (
     <div className=" min-h-screen  flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl  bg-white shadow-2xl rounded-tr-[30px] rounded-bl-[30px] px-10 py-10  mt-10 w-full mx-auto">
@@ -31,7 +55,7 @@ console.log("1ab7027724d8d791eeae"+ "git hub id")
               <Image src={logo} alt="logo" />
             </div>
             <div className="text-3xl mt-4 font-semibold text-center">
-              Welcome Arya Soni!
+              Welcome !
             </div>
             <span className="flex text-md mt-4 mx-auto">
               {/* <hr className="hidden md:block w-16 mt-3 mx-2" /> */}

@@ -4,6 +4,7 @@ import "./globals.css";
 // import cover from "../public/backgroundCover.png";
 import Image from "next/image";
 
+import { NextAuthProvider } from "./provider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -19,8 +20,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-  
-        <div className=" bg-[#C2DAFB]   h-[100vh] ">{children}</div>
+        <NextAuthProvider>
+          <div className=" bg-[#C2DAFB]   h-[100vh] ">{children}</div>
+        </NextAuthProvider>
       </body>
     </html>
   );
