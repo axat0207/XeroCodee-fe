@@ -10,15 +10,16 @@ import { Card } from "@/components/Card";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Cookies from "js-cookie";
+import { signIn } from "next-auth/react";
 
 export default function Login() {
   const router = useRouter();
   const login = (e: any) => {
     e.preventDefault();
-    Cookies.set("loggedin", "true");
+    // Cookies.set("loggedin", "true");
     router.push("/intermediate");
   };
-
+console.log("1ab7027724d8d791eeae"+ "git hub id")
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   return (
@@ -63,6 +64,7 @@ export default function Login() {
               <Button
                 variant={"outline"}
                 className="gap-2 text-slate-600 text-sm"
+                onClick={() => signIn('google')}
               >
                 <div>Google Login</div>
                 <div className="w-7">
@@ -72,6 +74,7 @@ export default function Login() {
               <Button
                 variant={"outline"}
                 className="text-slate-600 gap-2 text-sm"
+                onClick={() => signIn('github')}
               >
                 <div>Github Login</div>
                 <div className="w-7">
