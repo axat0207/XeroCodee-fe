@@ -16,7 +16,7 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const apiUrl = "http://localhost:8888/"
+  const apiUrl = "https://xerocode-be-assignment.netlify.app/"
   const router = useRouter();
   const login = async(e: any) => {
     e.preventDefault();
@@ -43,8 +43,7 @@ export default function Login() {
   
     
   };
-console.log(process.env.NODE_ENV+ "  mdfm flks")
-console.log(process.env.NEXT_PUBLIC_GITHUB_ID+ "   github id")
+
 
   return (
     <div className=" min-h-screen  flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8">

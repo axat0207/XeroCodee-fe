@@ -13,47 +13,39 @@ import github from "@/public/github1.png";
 import { signIn } from "next-auth/react";
 export default function Signup() {
   const router = useRouter();
-  const apiUrl = "http://localhost:8888/"
+  const apiUrl = "https://xerocode-be-assignment.netlify.app/"
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setcConfirmPPassword] = useState("");
 
-  const handleSubmit = async (e:any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    if(password!==confirmPassword)
-    {
-        alert('Password and confirmPassword must be Same!');
-        return;
+    if (password !== confirmPassword) {
+      alert("Password and confirmPassword must be Same!");
+      return;
     }
-    const response = await fetch(apiUrl+"api/auth/createuser", {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({name: name,email: email, password: password})
-        
+    const response = await fetch(apiUrl + "api/auth/createuser", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name: name, email: email, password: password }),
     });
-   
-    const json = await response.json()
+
+    const json = await response.json();
     console.log(json);
-    
-    if(json.error){
-      alert(json.error)
+
+    if (json.error) {
+      alert(json.error);
     }
-    if (json.authtoken){
+    if (json.authtoken) {
       // Save the auth token and redirect
-      localStorage.setItem('token', json.authtoken); 
+      localStorage.setItem("token", json.authtoken);
       router.push("/intermediate");
-      alert('Account Created Successfully')
-
-  }
- 
-
-        
-    
-    
-}
+      alert("Account Created Successfully");
+    }
+  };
 
   return (
     <div className=" min-h-screen flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8">
@@ -110,7 +102,14 @@ export default function Signup() {
                 variant={"outline"}
                 className="gap-2 text-slate-600 text-sm"
               >
-                <div onClick={()=>{signIn('google');router.push("/intermediate")}} >Google Login</div>
+                <div
+                  onClick={() => {
+                    signIn("google");
+                    router.push("/intermediate");
+                  }}
+                >
+                  Google Login
+                </div>
                 <div className="w-7">
                   <Image src={google} alt="google" />
                 </div>
@@ -119,7 +118,14 @@ export default function Signup() {
                 variant={"outline"}
                 className="text-slate-600 gap-2 text-sm"
               >
-                <div onClick={()=>{signIn('github');router.push("/intermediate");}}>Github Login</div>
+                <div
+                  onClick={() => {
+                    signIn("github");
+                    router.push("/intermediate");
+                  }}
+                >
+                  Github Login
+                </div>
                 <div className="w-7">
                   <Image className="" src={github} alt="github" />
                 </div>
